@@ -11,7 +11,7 @@
 #import "PagarMeCreditCard.h"
 #import "PagarMe.h"
 #import "Luhn.h"
-#import "RSA.h"
+#import "PagarmeRSA.h"
 
 @interface PagarMeCreditCard ()
 
@@ -74,13 +74,13 @@
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     [parameters setObject:[[PagarMe sharedInstance] encryptionKey] forKey:@"encryption_key"];
     
-    [manager GET:url parameters:parameters progress:nil success:^(NSURLSessionTask *task, id responseObject) {
+    [manager GET:url parameters:parameters headers:nil progress:nil success:^(NSURLSessionTask *task, id responseObject) {
         
         NSArray *_id = [responseObject objectForKey:@"id"];
         NSString *publicKey = [responseObject objectForKey:@"public_key"];
         NSString *cardHashString = [self cardHashString];
         
-        NSString *encryptedString = [RSA encryptString:cardHashString publicKey:publicKey];
+        NSString *encryptedString = [PagarmeRSA encryptString:cardHashString publicKey:publicKey];
         
         _callbackBlock(nil, [NSString stringWithFormat:@"%@_%@", _id, encryptedString]);
         
