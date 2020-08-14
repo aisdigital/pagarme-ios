@@ -119,14 +119,14 @@ static NSData *base64_decode(NSString *str){
 
 + (NSString *)encryptString:(NSString *)str publicKey:(NSString *)pubKey{
 	NSData* data = [str dataUsingEncoding:NSUTF8StringEncoding];
-	return [RSA encryptData:data publicKey:pubKey];
+	return [PagarmeRSA encryptData:data publicKey:pubKey];
 }
 
 + (NSString *)encryptData:(NSData *)data publicKey:(NSString *)pubKey{
 	if(!data || !pubKey){
 		return nil;
 	}
-	SecKeyRef keyRef = [RSA addPublicKey:pubKey];
+	SecKeyRef keyRef = [PagarmeRSA addPublicKey:pubKey];
 	if(!keyRef){
 		return nil;
 	}
